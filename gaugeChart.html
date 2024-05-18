@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semi-Donut Gauge Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .gauge {
+            width: 300px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gauge"></div>
+
+    <script>
+        // Sample data for the gauge
+        const data = 70;
+
+        // Set up the SVG
+        const svg = d3.select('.gauge')
+            .append('svg')
+            .attr('width', '100%')
+            .attr('height', '100%')
+            .attr('viewBox', '0 0 150 150')
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+            .append('g')
+            .attr('transform', 'translate(75, 75)');
+
+        // Create the arc for the semi-donut
+        const arc = d3.arc()
+            .innerRadius(50)
+            .outerRadius(70)
+            .startAngle(-Math.PI / 2)
+            .endAngle(Math.PI / 2);
+
+        // Append the semi-donut path
+        svg.append('path')
+            .attr('class', 'arc')
+            .attr('d', arc)
+            .style('fill', 'lightblue');
+
+        // Add indicator line
+        const indicator = svg.append('line')
+            .attr('x1', 0)
+            .attr('y1', 0)
+            .attr('x2', 0)
+            .attr('y2', -40)
+            .style('stroke', 'red')
+            .style('stroke-width', 2);
+
+        // Update indicator position based on data
+        function updateIndicator(value) {
+            const angle = (value / 100) * Math.PI;
+            const newX = 40 * Math.cos(angle);
+            const newY = 40 * Math.sin(angle);
+            indicator.attr('x2', newX)
+                    .attr('y2', newY);
+        }
+
+        // Initial update
+        updateIndicator(data);
+    </script>
+</body>
+</html>
